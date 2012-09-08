@@ -49,6 +49,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.MultiCheckPreference;
 import android.preference.Preference;
+import android.preference.PreferenceGroup;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
@@ -103,6 +104,7 @@ public class DevelopmentSettings extends PreferenceFragment
     private static final String APP_PROCESS_LIMIT_KEY = "app_process_limit";
 
     private static final String SHOW_ALL_ANRS_KEY = "show_all_anrs";
+    private static final String PREF_KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
 
     private static final String TAG_CONFIRM_ENFORCE = "confirm_enforce";
 
@@ -146,6 +148,7 @@ public class DevelopmentSettings extends PreferenceFragment
     private ListPreference mAppProcessLimit;
 
     private CheckBoxPreference mShowAllANRs;
+    private CheckBoxPreference mKillAppLongpressBack;
 
     private final ArrayList<Preference> mAllPrefs = new ArrayList<Preference>();
     private final ArrayList<CheckBoxPreference> mResetCbPrefs
@@ -220,6 +223,9 @@ public class DevelopmentSettings extends PreferenceFragment
                 SHOW_ALL_ANRS_KEY);
         mAllPrefs.add(mShowAllANRs);
         mResetCbPrefs.add(mShowAllANRs);
+
+	mKillAppLongpressBack = (CheckBoxPreference) findPreference(PREF_KILL_APP_LONGPRESS_BACK);
+                updateKillAppLongpressBackOptions();
 
         Preference hdcpChecking = findPreference(HDCP_CHECKING_KEY);
         if (hdcpChecking != null) {
@@ -704,6 +710,16 @@ public class DevelopmentSettings extends PreferenceFragment
             getActivity().getContentResolver(), Settings.Secure.ANR_SHOW_BACKGROUND, 0) != 0);
     }
 
+    private void writeKillAppLongpressBackOptions() {
+        Settings.System.putInt(getActivity().getContentResolver(),
+                Settings.System.KILL_APP_LONGPRESS_BACK, mKillAppLongpressBack.isChecked() ? 1 : 0);
+    }
+
+    private void updateKillAppLongpressBackOptions() {
+        mKillAppLongpressBack.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.KILL_APP_LONGPRESS_BACK, 0) != 0);
+    }
+
     private void updateEnableTracesOptions() {
         String strValue = SystemProperties.get(Trace.PROPERTY_TRACE_TAG_ENABLEFLAGS);
         long flags = SystemProperties.getLong(Trace.PROPERTY_TRACE_TAG_ENABLEFLAGS, 0);
@@ -844,6 +860,8 @@ public class DevelopmentSettings extends PreferenceFragment
             writeImmediatelyDestroyActivitiesOptions();
         } else if (preference == mShowAllANRs) {
             writeShowAllANRsOptions();
+	} else if (preference == mKillAppLongpressBack) {
+            writeKillAppLongpressBackOptions();
         } else if (preference == mForceHardwareUi) {
             writeHardwareUiOptions();
         } else if (preference == mTrackFrameTime) {
