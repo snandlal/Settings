@@ -88,6 +88,15 @@
         android:icon="@drawable/ic_settings_battery"
         android:title="@string/power_usage_summary_title" />
 
+    <!-- Advanced GPS -->
+    <header android:icon="@drawable/ic_settings_location"
+            android:title="@string/Advanced_GPS_title">
+        <intent
+                android:action="android.intent.action.MAIN"
+                android:targetPackage="com.sec.android.app.lbstestmode"
+                android:targetClass="com.sec.android.app.lbstestmode.LbsTestMode" />
+    </header>
+
     <!-- Application Settings -->
     <header
         android:fragment="com.android.settings.applications.ManageApplications"
