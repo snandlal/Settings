@@ -95,6 +95,15 @@
         android:title="@string/applications_settings"
         android:id="@+id/application_settings" />
 
+    <!-- Advanced GPS -->
+    <header android:icon="@drawable/ic_settings_location"
+            android:title="@string/Advanced_GPS_title">
+        <intent
+                android:action="android.intent.action.MAIN"
+                android:targetPackage="com.sec.android.app.lbstestmode"
+                android:targetClass="com.sec.android.app.lbstestmode.LbsTestMode" />
+    </header>
+
     <!-- CPU Settings -->
     <header
         android:fragment="com.android.settings.CPUSettings"
